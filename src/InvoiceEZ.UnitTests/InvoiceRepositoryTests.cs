@@ -120,6 +120,18 @@ public class InvoiceRepositoryTests
        result.Should().BeEquivalentTo(new Dictionary<string, long>());
     }
 
+    [Test]
+    public void GetItemsReport_InvalidDatesRange_ExceptionShouldBeThrown(){
+        // Arrange
+       SeedInvoiceRepository(new List<Invoice>());
+
+        // Act
+        Action act = () => _repository.GetItemsReport(new DateTime(2018, 1, 5), new DateTime(2018, 1, 4));
+
+        // Assert
+        act.Should().Throw<ArgumentException>().WithMessage("Invalid range: from date is greated than to date");
+    }
+
     private void SeedInvoiceRepository(IEnumerable<Invoice> invoices) {
         _mockInvoices.Setup(i => i.GetEnumerator()).Returns(invoices.GetEnumerator());
         _mockInvoices.Setup(i => i.Provider).Returns(invoices.AsQueryable().Provider);

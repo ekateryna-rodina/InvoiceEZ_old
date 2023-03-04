@@ -11,7 +11,7 @@ namespace InvoiceEZ.Infrastructure.Repositories
 		{
             if (invoices == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(invoices));
             }
 
             _invoices = invoices;
@@ -21,6 +21,7 @@ namespace InvoiceEZ.Infrastructure.Repositories
             if (from != null && to != null && DateTime.Compare((DateTime)from, (DateTime)to) > 0) 
             {
                 Console.WriteLine("Invalid range: from date is greated than to");
+                throw new ArgumentException($"Invalid range: {nameof(from)} date is greated than {nameof(to)} date");
             }
 
             // filter invoices by creation date if from or to dates are specified
@@ -34,24 +35,34 @@ namespace InvoiceEZ.Infrastructure.Repositories
         }
         public decimal? GetTotal(int invoiceId)
         {
+            decimal? total = null;
             // Note that some of the tests provided use negative IDs for invoices, but in a real-life application, 
-            // it's generally not recommended to allow IDs that are less than or equal to zero for invoices, unless there are specific requirements or constraints that mandate it.
+            // it's generally not recommended to allow IDs that are less than or equal to zero for invoices, 
+            // unless there are specific requirements or constraints that mandate it.
+            // As an alternative to returning null, we could throw an exception with details regarding an invalid invoiceId.
             if(invoiceId <= 0){
                 Console.WriteLine("Input cannot be negative or 0");
+                return null;
             }
-            decimal? total;
+
             var invoice = _invoices.FirstOrDefault(i => i.Id == invoiceId);
             if (invoice == null) {
                 return null;
             }
+            var invoiceItems = invoice.InvoiceItems;
+            
+            if (invoiceItems != null)
+            {
+                total = invoiceItems.Sum(item => item.Price * item.Count);
+            }
 
-            total = invoice.InvoiceItems.Sum(item => item.Price * item.Count);
             return total;
         }
 
         public decimal GetTotalOfUnpaid()
         {
-            var total = _invoices.Where(i => i.AcceptanceDate == null)
+            decimal total = 0;
+            total = _invoices.Where(i => i.AcceptanceDate == null && i.InvoiceItems != null)
                 .Sum(i => i.InvoiceItems.Sum(item => item.Price*item.Count));
             return total;
         }
