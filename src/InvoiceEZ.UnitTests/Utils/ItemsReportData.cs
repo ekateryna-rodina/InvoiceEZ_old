@@ -36,7 +36,8 @@ public static class ItemsReportData
         (DateTime.Parse("0001-01-01T00:00:00.0000000"), DateTime.Parse("2018-01-01T00:00:00.0000000")),
         (null, DateTime.Parse("2018-01-01T00:00:00.0000000")),
         (DateTime.Parse("2018-01-03T00:00:00.0000000"), DateTime.Parse("2018-01-05T00:00:00.0000000")),
-        (DateTime.Parse("2018-01-02T00:00:00.0000000"), DateTime.Parse("2018-01-03T00:00:00.0000000"))
+        (DateTime.Parse("2018-01-02T00:00:00.0000000"), DateTime.Parse("2018-01-03T00:00:00.0000000")),
+        (DateTime.Parse("2018-01-03T00:00:00.0000000"), DateTime.Parse("2018-01-04T00:00:00.0000000"))
     };
     public static List<(DateTime?, DateTime?)> RangeNoInvoiceCases = new List<(DateTime?, DateTime?)>(){
         (DateTime.Parse("2018-01-03T00:00:00.0000000"), DateTime.Parse("9999-12-31T23:59:59.9999999")),
@@ -47,9 +48,10 @@ public static class ItemsReportData
         (DateTime.Parse("2018-01-03T00:00:00.0000000"), DateTime.Parse("2018-01-05T00:00:00.0000000")),
         (DateTime.Parse("0001-01-01T00:00:00.0000000"), DateTime.Parse("2018-01-01T00:00:00.0000000")),
         (DateTime.Parse("2018-01-02T00:00:00.0000000"), DateTime.Parse("2018-01-03T00:00:00.0000000")),
+        (null, DateTime.Parse("2018-01-01T00:00:00.0000000")),
     };
     #endregion
-    
+
     #region InvoicesInTheRangeTestCases
     public static List<List<Invoice>> InvoicesInTheRangeTestCases = new List<List<Invoice>>(){
         new List<Invoice>(){
@@ -182,6 +184,29 @@ public static class ItemsReportData
                 }
             }
         },
+        new List<Invoice>(){
+            new Invoice(){
+                Id = 5, 
+                CreationDate = new DateTime(2018, 1, 3).AddMinutes(30),
+                InvoiceItems = new List<InvoiceItem>(){
+                    _invoiceItemTestCases["banana"]
+                }
+            },
+            new Invoice(){
+                Id = 5, 
+                CreationDate = new DateTime(2018, 1, 4),
+                InvoiceItems = new List<InvoiceItem>(){
+                    _invoiceItemTestCases["apple"]
+                }
+            },
+            new Invoice(){
+                Id = 5, 
+                CreationDate = new DateTime(2018, 1, 4).AddMinutes(30),
+                InvoiceItems = new List<InvoiceItem>(){
+                    _invoiceItemTestCases["yourFavoriteFruit"]
+                }
+            }
+        },
     };
 #endregion
     #region InvoicesOutOfRangeTestCases
@@ -258,6 +283,22 @@ public static class ItemsReportData
                 }
             }
         },
+        new List<Invoice>(){
+            new Invoice(){
+                Id = 5, 
+                CreationDate = new DateTime(2018, 1, 5),
+                InvoiceItems = new List<InvoiceItem>(){
+                    _invoiceItemTestCases["apple"]
+                }
+            },
+            new Invoice(){
+                Id = 5, 
+                CreationDate = new DateTime(2018, 1, 25),
+                InvoiceItems = new List<InvoiceItem>(){
+                    _invoiceItemTestCases["yourFavoriteFruit"]
+                }
+            }
+        },
     };
     #endregion
     public static List<Dictionary<string, long>> ResultInvoceExistTestCases = new List<Dictionary<string, long>>(){
@@ -268,6 +309,7 @@ public static class ItemsReportData
         new Dictionary<string, long>{{"apple", _invoiceItemTestCases["apple"].Count}, {"yourFavoriteFruit", _invoiceItemTestCases["yourFavoriteFruit"].Count}},
         new Dictionary<string, long>{{"apple", _invoiceItemTestCases["apple"].Count}},
         new Dictionary<string, long>{{"banana", _invoiceItemTestCases["banana"].Count}},
+        new Dictionary<string, long>{{"apple", _invoiceItemTestCases["apple"].Count}, {"banana", _invoiceItemTestCases["banana"].Count}},
         new Dictionary<string, long>{{"apple", _invoiceItemTestCases["apple"].Count}, {"banana", _invoiceItemTestCases["banana"].Count}},
     };
 }

@@ -10,6 +10,17 @@ public class InvoiceRepositoryTests
 {
     private Mock<IQueryable<Invoice>> _mockInvoices = new Mock<IQueryable<Invoice>>();
 
+    [Test]
+    public void Constructor_NullInputParameter_ExceptionShouldBeThrown(){
+        // Arrange
+        IQueryable<Invoice>? invoices = null;
+        // warning is by design in this case because constuctor param is not nullable
+        Action act = () => new InvoiceRepository(invoices); 
+
+        // Act & Assert
+        act.Should().Throw<ArgumentNullException>();
+    }
+
     // Using TestCaseSource is a workaround to allow decimal as a parameter for TestCaseAttribute
     [Test, TestCaseSource(typeof(GetTotalTestCaseUtils), nameof(GetTotalTestCaseUtils.TotalCaseParams))]
     [TestCase(Int32.MinValue)]
