@@ -10,12 +10,6 @@ public class InvoiceRepositoryTests
 {
     private Mock<IQueryable<Invoice>> _mockInvoices = new Mock<IQueryable<Invoice>>();
 
-    [SetUp]
-    public void Setup()
-    {
-       
-    }
-
     // Using TestCaseSource is a workaround to allow decimal as a parameter for TestCaseAttribute
     [Test, TestCaseSource(typeof(GetTotalTestCaseUtils), nameof(GetTotalTestCaseUtils.TotalCaseParams))]
     [TestCase(Int32.MinValue)]
@@ -95,7 +89,22 @@ public class InvoiceRepositoryTests
        var result = repository.GetItemsReport(from, to);
 
        // Assert
+       result.Should().NotBeNull();
        result.Should().BeEquivalentTo(output);
+    }
+
+    [Test, TestCaseSource(typeof(GetReportTestCaseUtils), nameof(GetReportTestCaseUtils.ItemReportsNoInvoiceCaseParams))]
+    public void GetItemsReport_NoInvoices_EmptyReportShouldBeReturned(DateTime? from, DateTime? to, List<Invoice> invoices){
+        // Arrange
+       SeedInvoiceRepository(invoices);
+       var repository = new InvoiceRepository(_mockInvoices.Object);
+
+       // Act
+       var result = repository.GetItemsReport(from, to);
+
+       // Assert
+       result.Should().NotBeNull();
+       result.Should().BeEquivalentTo(new Dictionary<string, long>());
     }
 
     private void SeedInvoiceRepository(IEnumerable<Invoice> invoices) {
