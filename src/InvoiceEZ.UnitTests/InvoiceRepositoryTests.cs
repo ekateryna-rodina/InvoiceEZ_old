@@ -17,14 +17,14 @@ public class InvoiceRepositoryTests
     }
 
     // Using TestCaseSource is a workaround to allow decimal as a parameter for TestCaseAttribute
-    [Test, TestCaseSource(typeof(TestCaseUtils), nameof(TestCaseUtils.TotalCaseParams))]
+    [Test, TestCaseSource(typeof(GetTotalTestCaseUtils), nameof(GetTotalTestCaseUtils.TotalCaseParams))]
     [TestCase(Int32.MinValue)]
     [TestCase(Int32.MaxValue)]
     [TestCase(5)]
     [TestCase(-1)]
     public void GetTotal_InvoicesExist_CorrectValueShouldBeReturned(int input, decimal? output = null)
     {
-        var invoices = TestCaseUtils.SeedInvoices;
+        var invoices = GetTotalTestCaseUtils.SeedInvoices;
         SeedInvoiceRepository(invoices);
         var repository = new InvoiceRepository(_mockInvoices.Object);
 
@@ -55,6 +55,47 @@ public class InvoiceRepositoryTests
 
        // Assert
        result.Should().BeNull();
+    }
+
+    [Test]
+    public void GetTotalOfUnpaid_NoInvoices_ZeroShouldBeReturned(){
+        // Arrange
+        var invoices = GetTotalTestCaseUtils.SeedInvoices;
+        SeedInvoiceRepository(invoices);
+        var repository = new InvoiceRepository(_mockInvoices.Object);
+
+       // Act
+       var result = repository.GetTotalOfUnpaid();
+
+       // Assert
+       result.Should().Be(0);
+    }
+
+    [Test]
+    public void GetTotalOfUnpaid_InvoicesExist_CorrectValueShouldBeReturned(){
+        // Arrange
+        var invoices = GetTotalTestCaseUtils.SeedInvoicesIncludingUnpaid;
+       SeedInvoiceRepository(invoices);
+       var repository = new InvoiceRepository(_mockInvoices.Object);
+
+       // Act
+       var result = repository.GetTotalOfUnpaid();
+
+       // Assert
+       result.Should().Be(GetTotalTestCaseUtils.UNPAID_TOTAL);
+    }
+
+    [Test, TestCaseSource(typeof(GetReportTestCaseUtils), nameof(GetReportTestCaseUtils.ItemReportsInvoiceExistCaseParams))]
+    public void GetItemsReport_InvoicesExist_CorrectReportShouldBeReturned(DateTime? from, DateTime? to, List<Invoice> invoices, Dictionary<string, long> output){
+        // Arrange
+       SeedInvoiceRepository(invoices);
+       var repository = new InvoiceRepository(_mockInvoices.Object);
+
+       // Act
+       var result = repository.GetItemsReport(from, to);
+
+       // Assert
+       result.Should().BeEquivalentTo(output);
     }
 
     private void SeedInvoiceRepository(IEnumerable<Invoice> invoices) {
