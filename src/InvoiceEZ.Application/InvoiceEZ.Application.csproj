@@ -16,4 +16,7 @@
     <Folder Include="DTOs\" />
     <Folder Include="Mappers\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InvoiceEZ.Domain\InvoiceEZ.Domain.csproj" />
+  </ItemGroup>
 </Project>

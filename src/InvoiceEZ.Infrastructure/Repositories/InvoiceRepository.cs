@@ -6,7 +6,7 @@ namespace InvoiceEZ.Infrastructure.Repositories
 	public class InvoiceRepository : IInvoiceRepository
 	{
         private readonly IQueryable<Invoice> _invoices;
-
+        
         public InvoiceRepository(IQueryable<Invoice> invoices)
 		{
             if (invoices == null)

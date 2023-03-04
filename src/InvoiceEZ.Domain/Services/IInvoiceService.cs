@@ -1,8 +1,6 @@
-﻿using System;
 namespace InvoiceEZ.Domain.Repositories
 {
-	public interface IInvoiceRepository
-	{
+	public interface IInvoiceService {
         /// <summary>
         /// Calculates total price of all items listed in the invoice.
         /// </summary>
@@ -12,7 +10,6 @@ namespace InvoiceEZ.Domain.Repositories
         /// Returns null if the invoice is not found.
         /// </returns>
         decimal? GetTotal(int invoiceId);
-
         /// <summary>
         /// Calculates total price of all items which belong to unpaid invoices.
         /// </summary>
@@ -20,7 +17,6 @@ namespace InvoiceEZ.Domain.Repositories
         /// The total price of all items listed in the unpaid invoices.
         /// </returns>
         decimal GetTotalOfUnpaid();
-
         /// <summary>
         /// Generates a report of all items purchased, including their names and quantities.
         /// </summary>
@@ -36,4 +32,3 @@ namespace InvoiceEZ.Domain.Repositories
         IReadOnlyDictionary<string, long> GetItemsReport(DateTime? from, DateTime? to);
     }
 }
-
