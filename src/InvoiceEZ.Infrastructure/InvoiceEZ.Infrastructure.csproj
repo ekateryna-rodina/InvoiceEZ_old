@@ -8,10 +8,12 @@
 
   <ItemGroup>
     <None Remove="Repositories\" />
-    <None Remove="Exceptions\" />
+    <None Remove="Microsoft.EntityFrameworkCore.InMemory" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\" />
-    <Folder Include="Exceptions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InvoiceEZ.Domain\InvoiceEZ.Domain.csproj" />
   </ItemGroup>
 </Project>

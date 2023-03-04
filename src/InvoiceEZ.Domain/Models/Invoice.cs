@@ -22,7 +22,7 @@ namespace InvoiceEZ.Domain.Models
         // A date when an invoice was paid (optional).
         public DateTime? AcceptanceDate { get; set; }
         // A collection of invoice items for a given invoice (can be empty but is never null).
-        public IList<InvoiceItem> InvoiceItems { get; }
+        public IList<InvoiceItem> InvoiceItems { get; set; } // todo: fix this
     }
 }
 
