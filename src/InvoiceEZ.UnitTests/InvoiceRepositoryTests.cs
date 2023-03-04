@@ -8,17 +8,24 @@ namespace InvoiceEZ.UnitTests;
 
 public class InvoiceRepositoryTests
 {
-    private Mock<IQueryable<Invoice>> _mockInvoices = new Mock<IQueryable<Invoice>>();
+    private Mock<IQueryable<Invoice>> _mockInvoices;
+    private InvoiceRepository _repository;
 
+    public InvoiceRepositoryTests()
+    {
+        _mockInvoices = new Mock<IQueryable<Invoice>>();
+        _repository = new InvoiceRepository(_mockInvoices.Object);
+    }
     [Test]
     public void Constructor_NullInputParameter_ExceptionShouldBeThrown(){
         // Arrange
         IQueryable<Invoice>? invoices = null;
+        var errorMessage = "Value cannot be null. (Parameter 'invoices')";
         // warning is by design in this case because constuctor param is not nullable
-        Action act = () => new InvoiceRepository(invoices); 
+        Action act = () => new InvoiceRepository(invoices);
 
         // Act & Assert
-        act.Should().Throw<ArgumentNullException>();
+        act.Should().Throw<ArgumentNullException>().WithMessage(errorMessage);
     }
 
     // Using TestCaseSource is a workaround to allow decimal as a parameter for TestCaseAttribute
@@ -29,12 +36,12 @@ public class InvoiceRepositoryTests
     [TestCase(-1)]
     public void GetTotal_InvoicesExist_CorrectValueShouldBeReturned(int input, decimal? output = null)
     {
+        // Arrange
         var invoices = GetTotalTestCaseUtils.SeedInvoices;
         SeedInvoiceRepository(invoices);
-        var repository = new InvoiceRepository(_mockInvoices.Object);
-
+    
         // Act
-        var result = repository.GetTotal(input);
+        var result = _repository.GetTotal(input);
 
         // Assert
         result.Should().Be(output);
@@ -53,10 +60,9 @@ public class InvoiceRepositoryTests
     {
        // Arrange
        SeedInvoiceRepository(new List<Invoice>());
-       var repository = new InvoiceRepository(_mockInvoices.Object);
 
        // Act
-       var result = repository.GetTotal(input);
+       var result = _repository.GetTotal(input);
 
        // Assert
        result.Should().BeNull();
@@ -67,10 +73,9 @@ public class InvoiceRepositoryTests
         // Arrange
         var invoices = GetTotalTestCaseUtils.SeedInvoices;
         SeedInvoiceRepository(invoices);
-        var repository = new InvoiceRepository(_mockInvoices.Object);
-
+        
        // Act
-       var result = repository.GetTotalOfUnpaid();
+       var result = _repository.GetTotalOfUnpaid();
 
        // Assert
        result.Should().Be(0);
@@ -81,10 +86,9 @@ public class InvoiceRepositoryTests
         // Arrange
         var invoices = GetTotalTestCaseUtils.SeedInvoicesIncludingUnpaid;
        SeedInvoiceRepository(invoices);
-       var repository = new InvoiceRepository(_mockInvoices.Object);
-
+       
        // Act
-       var result = repository.GetTotalOfUnpaid();
+       var result = _repository.GetTotalOfUnpaid();
 
        // Assert
        result.Should().Be(GetTotalTestCaseUtils.UNPAID_TOTAL);
@@ -94,10 +98,9 @@ public class InvoiceRepositoryTests
     public void GetItemsReport_InvoicesExist_CorrectReportShouldBeReturned(DateTime? from, DateTime? to, List<Invoice> invoices, Dictionary<string, long> output){
         // Arrange
        SeedInvoiceRepository(invoices);
-       var repository = new InvoiceRepository(_mockInvoices.Object);
 
        // Act
-       var result = repository.GetItemsReport(from, to);
+       var result = _repository.GetItemsReport(from, to);
 
        // Assert
        result.Should().NotBeNull();
@@ -108,10 +111,9 @@ public class InvoiceRepositoryTests
     public void GetItemsReport_NoInvoices_EmptyReportShouldBeReturned(DateTime? from, DateTime? to, List<Invoice> invoices){
         // Arrange
        SeedInvoiceRepository(invoices);
-       var repository = new InvoiceRepository(_mockInvoices.Object);
 
        // Act
-       var result = repository.GetItemsReport(from, to);
+       var result = _repository.GetItemsReport(from, to);
 
        // Assert
        result.Should().NotBeNull();
