@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\InvoiceEZ.Domain\InvoiceEZ.Domain.csproj" />
   </ItemGroup>
 </Project>

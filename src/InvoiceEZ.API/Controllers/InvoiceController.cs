@@ -16,12 +16,12 @@ namespace InvoiceEZ.API.Controllers
         public ActionResult<decimal> GetTotal(int id)
         {
             var result = _invoiceService.GetTotal(id);
-            if (result == null)
+            if (result.Value == null)
             {
-                return NotFound();
+                return NotFound("The invoice with the given id was not found.");
             }
 
-            return Ok(result);
+            return Ok(result.Value);
         }
 
         [HttpGet(APIRoutes.Invoice.TotalUnpaid)]

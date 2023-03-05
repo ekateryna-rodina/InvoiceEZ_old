@@ -1,5 +1,8 @@
-﻿using FluentAssertions;
+﻿using System.Net;
+using FluentAssertions;
 using InvoiceEZ.API;
+using InvoiceEZ.Application.Helpers;
+using InvoiceEZ.Shared.MockData;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 
@@ -18,15 +21,31 @@ public class InvoiceControllerTests
     public async Task GetTotalByInvoiceId_InvoiceExist_ShouldReturnCorrectTotal()
     {
         // Arrange
-        var invoiceId = 1;
+        var invoice = Invoices.Total.InvoiceTestCases[0];
+        var invoiceId = invoice.Id;
+        var total = Invoices.Total.ResultTestCases[invoiceId];
 
         // Act
         var response = await _httpClient.GetAsync(APIRoutes.Invoice.TotalByInvoiceId.Replace("{id}", invoiceId.ToString()));
 
         // Assert
         var responseContent = await response.Content.ReadAsStringAsync();
-        var result = JsonConvert.DeserializeObject<decimal>(responseContent);
         response.EnsureSuccessStatusCode();
-        result.Should().Be(15.99m);
+        var result = JsonConvert.DeserializeObject<decimal?>(responseContent);
+        result!.Should().Be(total);
+    }
+    [Test]
+    public async Task GetTotalByInvoiceId_NoInvoice_ShouldReturnNull()
+    {
+        // Arrange
+        var invoiceId = 33;
+     
+        // Act
+        var response = await _httpClient.GetAsync(APIRoutes.Invoice.TotalByInvoiceId.Replace("{id}", invoiceId.ToString()));
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        responseContent.Should().Be("The invoice with the given id was not found.");
     }
 }
