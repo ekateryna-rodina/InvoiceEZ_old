@@ -1,4 +1,4 @@
-using InvoiceEZ.Domain.Repositories;
+using InvoiceEZ.Application.Contracts;
 using Microsoft.AspNetCore.Mvc;
 namespace InvoiceEZ.API.Controllers
 {

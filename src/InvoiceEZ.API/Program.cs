@@ -1,4 +1,4 @@
-﻿using InvoiceEZ.Domain.Models;
+﻿using InvoiceEZ.Application.Contracts;
 using InvoiceEZ.Domain.Repositories;
 using InvoiceEZ.Infrastructure.Repositories;
 using InvoiceEZ.Shared.MockData;

@@ -1,3 +1,6 @@
+using InvoiceEZ.Application.Contracts;
+using InvoiceEZ.Application.Helpers;
+
 namespace InvoiceEZ.Domain.Repositories
 {
     public class InvoiceService : IInvoiceService
@@ -9,19 +12,43 @@ namespace InvoiceEZ.Domain.Repositories
             _invoiceRepository = invoiceRepository;
         }
 
-        public IReadOnlyDictionary<string, long> GetItemsReport(DateTime? from, DateTime? to)
+        public OperationResult<IReadOnlyDictionary<string, long>> GetItemsReport(DateTime? from, DateTime? to)
         {
-            return _invoiceRepository.GetItemsReport(from, to);
+            try
+            {
+                IReadOnlyDictionary<string, long> itemsReport = _invoiceRepository.GetItemsReport(from, to);
+                return OperationResult<IReadOnlyDictionary<string, long>>.CreateSuccess(itemsReport);
+            }
+            catch (Exception ex)
+            {
+                return OperationResult<IReadOnlyDictionary<string, long>>.CreateFailure(new List<Exception> { ex });
+            }
         }
 
-        public decimal? GetTotal(int invoiceId)
+        public OperationResult<decimal?> GetTotal(int invoiceId)
         {
-            return _invoiceRepository.GetTotal(invoiceId);
+            try
+            {
+                var total = _invoiceRepository.GetTotal(invoiceId);
+                return OperationResult<decimal?>.CreateSuccess(total);
+            }
+            catch (Exception ex)
+            {
+                return OperationResult<decimal?>.CreateFailure(new List<Exception> { ex });
+            }
         }
 
-        public decimal GetTotalOfUnpaid()
+        public OperationResult<decimal> GetTotalOfUnpaid()
         {
-            return _invoiceRepository.GetTotalOfUnpaid();
+            try
+            {
+                var total = _invoiceRepository.GetTotalOfUnpaid();
+                return OperationResult<decimal>.CreateSuccess(total);
+            }
+            catch (Exception ex)
+            {
+                return OperationResult<decimal>.CreateFailure(new List<Exception> { ex });
+            }
         }
     }
 }

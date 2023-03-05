@@ -8,13 +8,13 @@
 
   <ItemGroup>
     <None Remove="Services\" />
-    <None Remove="DTOs\" />
-    <None Remove="Mappers\" />
+    <None Remove="Helpers\" />
+    <None Remove="Contracts\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
-    <Folder Include="DTOs\" />
-    <Folder Include="Mappers\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Contracts\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InvoiceEZ.Domain\InvoiceEZ.Domain.csproj" />
