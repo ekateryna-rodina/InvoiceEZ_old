@@ -3,6 +3,7 @@ using InvoiceEZ.Domain.Models;
 using InvoiceEZ.Infrastructure.Repositories;
 using FluentAssertions;
 using InvoiceEZ.UnitTests.Utils;
+using InvoiceEZ.Shared.MockData;
 
 namespace InvoiceEZ.UnitTests;
 
@@ -37,7 +38,7 @@ public class InvoiceRepositoryTests
     public void GetTotal_InvoicesExist_CorrectValueShouldBeReturned(int input, decimal? output = null)
     {
         // Arrange
-        var invoices = GetTotalTestCaseUtils.SeedInvoices;
+        var invoices = Invoices.Total.InvoiceTestCases;
         SeedInvoiceRepository(invoices);
     
         // Act
@@ -71,7 +72,7 @@ public class InvoiceRepositoryTests
     [Test]
     public void GetTotalOfUnpaid_NoInvoices_ZeroShouldBeReturned(){
         // Arrange
-        var invoices = GetTotalTestCaseUtils.SeedInvoices;
+        var invoices = Invoices.Total.InvoiceTestCases.Where(i => i.AcceptanceDate != null);
         SeedInvoiceRepository(invoices);
         
        // Act
@@ -84,14 +85,14 @@ public class InvoiceRepositoryTests
     [Test]
     public void GetTotalOfUnpaid_InvoicesExist_CorrectValueShouldBeReturned(){
         // Arrange
-        var invoices = GetTotalTestCaseUtils.SeedInvoicesIncludingUnpaid;
+        var invoices = Invoices.Total.InvoiceTestCases;
        SeedInvoiceRepository(invoices);
        
        // Act
        var result = _repository.GetTotalOfUnpaid();
 
        // Assert
-       result.Should().Be(GetTotalTestCaseUtils.UNPAID_TOTAL);
+       result.Should().Be(Invoices.Total.UNPAID_AMOUNT);
     }
 
     [Test, TestCaseSource(typeof(GetReportTestCaseUtils), nameof(GetReportTestCaseUtils.ItemReportsInvoiceExistCaseParams))]

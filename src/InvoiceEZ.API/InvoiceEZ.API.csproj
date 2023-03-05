@@ -17,13 +17,27 @@
   <ItemGroup>
     <None Remove="Controllers\" />
     <None Remove="Microsoft.VisualStudio.Web.CodeGeneration.Design" />
+    <None Remove="MockData\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="MockData\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\InvoiceEZ.Domain\InvoiceEZ.Domain.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
-  </ItemGroup>
+    <ItemGroup>
+     <InternalsVisibleTo Include="InvoiceEZ.IntegrationTests" />
+</ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\InvoiceEZ.Domain\InvoiceEZ.Domain.csproj">
+        <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      </ProjectReference>
+      <ProjectReference Include="..\InvoiceEZ.Application\InvoiceEZ.Application.csproj">
+        <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      </ProjectReference>
+      <ProjectReference Include="..\InvoiceEZ.Infrastructure\InvoiceEZ.Infrastructure.csproj">
+        <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      </ProjectReference>
+      <ProjectReference Include="..\InvoiceEZ.Shared\InvoiceEZ.Shared.csproj">
+        <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      </ProjectReference>
+    </ItemGroup>
 </Project>

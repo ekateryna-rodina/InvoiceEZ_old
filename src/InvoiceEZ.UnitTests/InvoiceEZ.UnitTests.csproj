@@ -25,5 +25,6 @@
   <ItemGroup>
     <ProjectReference Include="..\InvoiceEZ.Domain\InvoiceEZ.Domain.csproj" />
     <ProjectReference Include="..\InvoiceEZ.Infrastructure\InvoiceEZ.Infrastructure.csproj" />
+    <ProjectReference Include="..\InvoiceEZ.Shared\InvoiceEZ.Shared.csproj" />
   </ItemGroup>
 </Project>

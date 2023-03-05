@@ -1,15 +1,24 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using InvoiceEZ.Domain.Models;
+using InvoiceEZ.Domain.Repositories;
+using InvoiceEZ.Infrastructure.Repositories;
+using InvoiceEZ.Shared.MockData;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>(provider =>
+{
+    var invoices = Invoices.Total.InvoiceTestCases;
+    var queryableInvoices = invoices.AsQueryable();
+    return new InvoiceRepository(queryableInvoices);
+});
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
